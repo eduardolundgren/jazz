@@ -2,4 +2,7 @@
 .ruby-gems
 .sass-cache
 
+bin
+dist
 lib/jruby.jar
+lib/ruby-gems.jar
