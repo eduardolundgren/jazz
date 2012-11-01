@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+
+<project name="jazz" basedir="." default="start">
+	<path id="lib.classpath">
+		<fileset dir="lib" includes="*.jar" />
+	</path>
+
+	<taskdef classpathref="lib.classpath"
+		resource="net/sf/antcontrib/antlib.xml" />
+
+	<target name="all">
+		<antcall target="jar" />
+	</target>
+
+	<target name="clean">
+		<delete dir="bin" />
+		<delete dir="dist" />
+		<delete file="lib/jruby.jar" />
+		<delete file="lib/ruby-gems.jar" />
+	</target>
+
+	<target name="compile">
+		<delete dir="bin" />
+		<mkdir dir="bin" />
+
+		<copy todir="bin">
+			<fileset dir="src" excludes="**/*.java" />
+		</copy>
+
+		<javac srcdir="src"
+			classpathref="lib.classpath"
+			destdir="bin"
+			includeAntRuntime="false"
+			includes="**/*.java"
+		/>
+	</target>
+
+	<target name="jar" depends="start, compile">
+		<delete dir="dist" />
+		<mkdir dir="dist" />
+
+		<jar destfile="dist/jazz.jar">
+			<fileset dir="bin"/>
+			<zipfileset includes="**/*" src="lib/jodd.jar"/>
+			<zipfileset includes="**/*" src="lib/jruby.jar"/>
+			<zipfileset includes="**/*" src="lib/ruby-gems.jar"/>
+			<manifest>
+				<attribute name="Main-Class"
+					value="com.liferay.scripting.sass.SASSParser"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="start" depends="build-ruby-gems" />
+
+	<target name="build-ruby-gems">
+		<if>
+			<not>
+				<available file="lib/jruby.jar" />
+			</not>
+			<then>
+				<get
+					dest="lib/jruby.jar"
+					src="http://jruby.org.s3.amazonaws.com/downloads/1.6.5/jruby-complete-1.6.5.jar"
+				/>
+			</then>
+		</if>
+		<if>
+			<not>
+				<available file="lib/ruby-gems.jar" />
+			</not>
+			<then>
+				<tstamp>
+					<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+				</tstamp>
+
+				<mkdir dir="${tstamp.value}/compass" />
+
+				<get
+					dest="${tstamp.value}/compass/compass-0.12.2.gem"
+					src="http://rubygems.org/downloads/compass-0.12.2.gem"
+				/>
+
+				<java
+					fork="true"
+					jar="lib/jruby.jar"
+				>
+					<arg line="-S gem install compass -i ./${tstamp.value}/output --no-rdoc --no-ri" />
+				</java>
+
+				<jar
+					basedir="${tstamp.value}/output"
+					jarfile="lib/ruby-gems.jar"
+				/>
+
+				<delete dir="${tstamp.value}" />
+			</then>
+		</if>
+	</target>
+</project>
