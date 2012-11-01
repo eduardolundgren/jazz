@@ -25,7 +25,7 @@ The ouput directory to place the converted files. **Note:** If not specified JAZ
 
 A folder where JAZZ will cache the compass ruby gem files. **Note:** If not specified JAZZ will create a directory called `.ruby-gems` in the jar directory.
 
-## Example
+## Examples
 
 ### Single file
 
