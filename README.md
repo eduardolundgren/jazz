@@ -6,7 +6,7 @@
 
 ### Installation
 
-Download the jar file `jazz.jar` [here](#).
+Download the jar file `jazz.jar` [here](https://github.com/downloads/eduardolundgren/jazz/jazz.jar).
 
 ### Syntax
 
@@ -44,13 +44,13 @@ Parse `file.scss` and replace its content with the parsed content into `/myfolde
 Parse all `*.scss` files from `myfolder` and replace their content with the parsed content.
 
 	java -jar jazz.jar /myfolder/*.scss
-	
+
 #### Multiple files into output directory
 
 Parse all `*.scss` files from `myfolder` and place the parsed content into `/myfolder/css/` folder.
 
 	java -jar jazz.jar /myfolder/*.scss /myfolder/css/
-	
+
 #### Advanced
 
 Parse all `*.scss` files from `myfolder` and place the parsed content into `/myfolder/css/` folder, using `/tmp/.custom-ruby-gems-dir` custom gem directory.
